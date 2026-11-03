@@ -69,6 +69,8 @@ Create all sample data with AI beforehand so nothing confidential appears on scr
    > Same question. Only use sources you can link to. If reliable data for this country and industry is not available, say so and give the closest available data, clearly labelled.
 4. Compare. Ask the room which one they'd put in a board deck.
 
+If your tool searches the web automatically and can't be switched off, add to step 1: *"Don't search the web; answer only from your own knowledge."*
+
 Tip: test 2–3 candidate questions beforehand and pick the one with the clearest contrast. Niche + local + specific year tends to work best.
 
 ### Demo 2 — Marketing: Brand Project (Slide 37)

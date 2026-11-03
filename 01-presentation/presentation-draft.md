@@ -1056,7 +1056,7 @@ Many people here manage or influence a team. The question is no longer "can I us
 
 ## Slide 54 — A team AI operating system
 
-**Time:** 3:40–3:44 · **Type:** Framework
+**Time:** 3:40–3:45 · **Type:** Framework
 
 **On slide:**
 1. **Approved tools** and the data traffic light
