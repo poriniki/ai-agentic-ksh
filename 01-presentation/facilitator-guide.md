@@ -24,6 +24,7 @@ Recommended load if time is limited: homework + **one** project. The team projec
 - [ ] Adapt Slides 7, 30 and 53 to your company's tools and policy
 - [ ] Fill dates and submission channel into the assignment files
 - [ ] Send participants a short pre-read: "Bring one recurring task you do every week or month"
+- [ ] Run the interactive website once on the laptop you will present from (`website/`, `npm start`) and join from a phone (see `website/README.md`)
 
 **Two days before**
 - [ ] Create the demo accounts' Projects and sample files (Section 4)
@@ -34,7 +35,8 @@ Recommended load if time is limited: homework + **one** project. The team projec
 - [ ] Wi-Fi tested, screen sharing tested, font size large enough to read from the back
 - [ ] Demo browser: logged in, previous chats cleared or hidden, notifications off
 - [ ] Printed or shared: 6-part brief, Delegation Matrix, process-map template
-- [ ] A sheet (or form) for team formation
+- [ ] A sheet (or form) for team formation (or use the team-name wall on slide 58)
+- [ ] Website: start the live server 15 minutes early, open the projector and console links, and scan the QR code with your own phone on the venue Wi-Fi. If the phone cannot connect, switch to a phone hotspot
 
 ## 3. Run of show
 

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Presenter console · AI-Powered Professional</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect x='8' y='92' width='16' height='22' rx='4' fill='%234338ca'/%3E%3Crect x='30' y='74' width='16' height='40' rx='4' fill='%234338ca'/%3E%3Crect x='52' y='56' width='16' height='58' rx='4' fill='%234338ca'/%3E%3Crect x='74' y='38' width='16' height='76' rx='4' fill='%230d9488'/%3E%3Crect x='96' y='20' width='16' height='94' rx='4' fill='%230d9488'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body class="console">
+  <header class="pc-top">
+    <div class="pc-brand"><span class="pc-mark" aria-hidden="true"></span>Presenter console</div>
+    <div id="pc-status" class="pc-status">Connecting…</div>
+    <div class="pc-clock">
+      <span id="pc-clock" class="pc-clock-time">00:00:00</span>
+      <span id="pc-variance" class="pc-variance"></span>
+      <button id="pc-clock-btn" class="pc-btn small" type="button">Start session clock</button>
+      <button id="pc-clock-stop" class="pc-btn small ghost" type="button">Stop</button>
+    </div>
+    <div id="pc-plan" class="pc-plan"></div>
+    <nav class="pc-links" aria-label="Links">
+      <a id="pc-open-deck" href="index.html" target="aipro-deck">Open deck</a>
+      <a id="pc-open-join" href="join.html" target="_blank" rel="noopener">Audience page</a>
+      <a id="pc-export" href="#" hidden>Export results</a>
+    </nav>
+  </header>
+  <div id="pc-toast" class="pc-toast" role="status"></div>
+
+  <main class="pc-grid">
+    <section class="pc-col" aria-label="Current slide">
+      <div class="pc-card" id="pc-current"></div>
+      <div class="pc-card pc-notes-card">
+        <h3>Speaker notes</h3>
+        <div id="pc-notes" class="pc-notes"></div>
+      </div>
+      <div class="pc-card" id="pc-fill-card" hidden>
+        <h3>Fill-ins on this slide</h3>
+        <ul id="pc-fill" class="pc-fill"></ul>
+      </div>
+      <details class="pc-card">
+        <summary>Design brief from the draft</summary>
+        <p id="pc-brief" class="pc-muted"></p>
+      </details>
+    </section>
+
+    <section class="pc-col" aria-label="Controls">
+      <div class="pc-card pc-nav">
+        <div class="pc-nav-row">
+          <button id="pc-prev" class="pc-big" type="button">← Back</button>
+          <button id="pc-next" class="pc-big primary" type="button">Next →</button>
+        </div>
+        <p class="pc-muted">Next reveals the next bullet, poll item or answer, then the next slide. Keys: ← → Space.</p>
+        <div class="pc-goto">
+          <label for="pc-goto">Go to slide</label>
+          <input id="pc-goto" type="number" min="1" max="61" value="1">
+          <button id="pc-go" class="pc-btn" type="button">Go</button>
+        </div>
+      </div>
+      <div class="pc-card">
+        <h3>Timers on this slide</h3>
+        <div id="pc-timers"></div>
+      </div>
+      <div class="pc-card">
+        <h3>Live on this slide</h3>
+        <div id="pc-results"></div>
+      </div>
+      <div class="pc-card">
+        <h3>Open answers (hide any you do not want shown)</h3>
+        <div id="pc-responses"></div>
+      </div>
+    </section>
+
+    <section class="pc-col" aria-label="Upcoming and all slides">
+      <div class="pc-card">
+        <h3>Up next</h3>
+        <div id="pc-next-slide"></div>
+      </div>
+      <div class="pc-card">
+        <h3>Audience reactions</h3>
+        <div id="pc-react" class="pc-react-row"></div>
+        <p id="pc-connections" class="pc-muted"></p>
+      </div>
+      <div class="pc-card">
+        <h3>Reset</h3>
+        <div class="pc-row wrap">
+          <button id="pc-reset-votes" class="pc-btn ghost" type="button">Clear poll answers</button>
+          <button id="pc-reset-responses" class="pc-btn ghost" type="button">Clear open answers</button>
+          <button id="pc-reset-all" class="pc-btn danger" type="button">Reset everything</button>
+        </div>
+      </div>
+      <div class="pc-card pc-all">
+        <h3>All slides</h3>
+        <ol id="pc-slides" class="pc-slides"></ol>
+      </div>
+    </section>
+  </main>
+  <p id="pc-base" class="pc-foot"></p>
+
+  <script src="data/deck.js"></script>
+  <script src="assets/js/core.js"></script>
+  <script src="assets/js/render.js"></script>
+  <script src="assets/js/sync.js"></script>
+  <script src="assets/js/interactions.js"></script>
+  <script src="assets/js/presenter.js"></script>
+</body>
+</html>

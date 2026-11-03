@@ -1,0 +1,15 @@
+{
+  "name": "ai-powered-professional-deck",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive web deck for The AI-Powered Professional workshop, with live audience polls, timers and Q&A.",
+  "scripts": {
+    "build": "node tools/build-deck.js",
+    "check": "node tools/check-deck.js",
+    "start": "node server.js",
+    "start:fresh": "node server.js --fresh"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
