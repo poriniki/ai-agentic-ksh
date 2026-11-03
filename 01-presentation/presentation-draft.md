@@ -1,4 +1,6 @@
-# From Chat User to AI Operator — Presentation Draft
+# The AI-Powered Professional — Presentation Draft
+
+*From Chat User to AI Operator: practical AI for Marketing, Business and Finance teams*
 
 Workshop for Marketing, Business and Finance teams · 4 hours · 61 slides
 
@@ -34,14 +36,14 @@ The thread through the whole session is three mental tools. Come back to them in
 **Time:** 0:00–0:01 · **Type:** Title
 
 **On slide:**
-- From Chat User to AI Operator
-- Using AI like a pro in Marketing, Business and Finance
+- The AI-Powered Professional
+- From Chat User to AI Operator: practical AI for Marketing, Business and Finance teams
 - [Presenter name] · [Date]
 
 **Visual:** Clean title. A small ladder icon (it comes back on Slide 5).
 
 **Speaker notes:**
-Welcome everyone. Say what today is *not*: it is not a tour of every button, and it is not a coding session. Everyone here already uses ChatGPT or Claude in the browser. Today is about the next step: using these tools in a structured way, so the results are reliable enough to use in real work and the whole team can benefit, not just one person.
+Welcome everyone to *The AI-Powered Professional*. The subtitle is the promise of the day: moving from casual chat user to someone who operates AI deliberately. Say what today is *not*: it is not a tour of every button, and it is not a coding session. Everyone here already uses ChatGPT or Claude in the browser. Today is about the next step: using these tools in a structured way, so the results are reliable enough to use in real work and the whole team can benefit, not just one person.
 
 ---
 

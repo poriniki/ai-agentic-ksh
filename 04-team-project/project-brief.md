@@ -1,5 +1,7 @@
 # Team Project — The AI-Assisted Decision Pack
 
+*Course: The AI-Powered Professional*
+
 **Who:** teams of 2–3 people, ideally from different departments
 **Due:** next session, [date — fill in]
 **Effort:** about 6–8 hours per person over 1–2 weeks

@@ -1,5 +1,7 @@
 # Learning Path After the Workshop
 
+*Course: The AI-Powered Professional*
+
 A self-paced path for participants who want to go deeper, condensed from the full plan in [`00-reference/ai-agents-learning-plan.md`](../00-reference/ai-agents-learning-plan.md). Everything is free, in English, and needs no coding. Plan for 6–8 weeks at 3–5 hours a week.
 
 ## How it connects to the workshop

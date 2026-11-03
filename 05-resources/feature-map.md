@@ -1,5 +1,7 @@
 # Feature Map: Claude and ChatGPT
 
+*Course: The AI-Powered Professional*
+
 The concepts transfer between tools; only the names differ. **Feature names and plan availability change often. Check this table against your company's actual tools and plan before the session** and delete rows you can't use.
 
 | What you need | Claude | ChatGPT | Use it for | Pro habit |

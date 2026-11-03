@@ -1,5 +1,7 @@
 # Homework — Business
 
+*Course: The AI-Powered Professional*
+
 For business development, strategy, sales operations, product and operations roles. Seven hands-on tasks. Required: 1, 2, 3 + any two of 4–7. Log each task using the template in [README.md](README.md).
 
 ---

@@ -1,5 +1,7 @@
 # Team Project Submission — The AI-Assisted Decision Pack
 
+*Course: The AI-Powered Professional*
+
 **Team name:**
 **Members and roles:**
 

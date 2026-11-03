@@ -1,4 +1,6 @@
-# From Chat User to AI Operator
+# The AI-Powered Professional
+
+*From Chat User to AI Operator: practical AI for Marketing, Business and Finance teams*
 
 A 4-hour workshop with homework and projects, teaching Marketing, Business and Finance teams to use AI assistants (Claude, ChatGPT) professionally: in their daily work, and as a managed team capability.
 

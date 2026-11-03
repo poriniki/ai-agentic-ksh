@@ -1,5 +1,7 @@
 # Prompt Library (participant handout)
 
+*Course: The AI-Powered Professional*
+
 Copy, fill the `[brackets]`, and adapt. These templates work in Claude, ChatGPT and other assistants. Put pasted material between `"""` or in tags like `<notes>…</notes>` so the AI doesn't confuse it with your instructions.
 
 ## 1. The 6-part brief

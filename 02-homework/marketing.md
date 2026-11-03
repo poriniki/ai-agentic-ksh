@@ -1,5 +1,7 @@
 # Homework — Marketing
 
+*Course: The AI-Powered Professional*
+
 Seven hands-on tasks. Required: 1, 2, 3 + any two of 4–7. Log each task using the template in [README.md](README.md).
 
 ---

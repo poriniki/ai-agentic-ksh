@@ -1,5 +1,7 @@
 # Homework — Overview
 
+*Course: The AI-Powered Professional*
+
 Each team has its own homework file. The tasks practise the features and thinking habits from the session on realistic work from your own field.
 
 | File | For |

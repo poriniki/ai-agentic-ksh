@@ -1,5 +1,7 @@
 # Team AI Charter — Template
 
+*Course: The AI-Powered Professional*
+
 A one-to-two page agreement on how a team uses AI. Fill it in with your team, keep it short, and review it every quarter. Used in Module 6 and as the starting point for the team project's Team AI Charter.
 
 This is a template, not legal advice. Align it with your company's official IT, security, privacy and legal policies; where they conflict, the company policy wins.

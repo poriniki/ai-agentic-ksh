@@ -1,5 +1,7 @@
 # Homework — Finance
 
+*Course: The AI-Powered Professional*
+
 For FP&A, accounting, controlling and treasury roles. Seven hands-on tasks. Required: 1, 2, 3 + any two of 4–7. Log each task using the template in [README.md](README.md).
 
 Finance work is high-stakes and numbers must be exact, so every task here includes a verification step. That isn't extra work; it's the main skill.

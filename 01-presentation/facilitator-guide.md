@@ -1,5 +1,7 @@
 # Facilitator Guide
 
+*Course: The AI-Powered Professional*
+
 This guide covers everything around the slides: preparation, the demo scripts, sample data, room logistics and backup plans. Read it together with `presentation-draft.md`.
 
 ## 1. Decisions to make before the session

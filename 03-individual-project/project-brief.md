@@ -1,5 +1,7 @@
 # Individual Project — My AI-Powered Workflow
 
+*Course: The AI-Powered Professional*
+
 **Who:** each participant, alone
 **Due:** next session, [date — fill in]
 **Effort:** about 4–6 hours spread over 1–2 weeks

@@ -1,5 +1,7 @@
 # Individual Project Submission — My AI-Powered Workflow
 
+*Course: The AI-Powered Professional*
+
 **Name:**
 **Team / role:**
 **Tool(s) used:**
