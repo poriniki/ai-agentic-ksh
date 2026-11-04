@@ -19,8 +19,9 @@ A 4-hour workshop with homework and projects, teaching Marketing, Business and F
   ai-agents-learning-plan.md      Source learning plan the workshop is built on
 01-presentation/
   presentation-draft.md           61 slides: on-slide content, visuals, speaker notes, timings
+  presentation-draft.fa.md        The same 61 slides in Persian (فارسی)
   facilitator-guide.md            Prep checklist, run of show, demo scripts, FAQs
-  website/                        The deck as an interactive website: live polls, timers, Q&A on phones
+  website/                        The deck as an interactive website in English and Persian: live polls, timers, Q&A on phones
 02-homework/
   README.md                       How homework works, the AI work log template, assessment
   marketing.md                    7 hands-on tasks for Marketing
@@ -41,7 +42,7 @@ A 4-hour workshop with homework and projects, teaching Marketing, Business and F
 
 ## Presenting
 
-Present from the interactive website in `01-presentation/website/`: it is built from `presentation-draft.md`, and the audience answers polls and questions on their phones. Run `npm start` in that folder (Node.js 18+, nothing to install). Its [README](01-presentation/website/README.md) covers presenting, editing and networks, and [PLAN.md](01-presentation/website/PLAN.md) explains the design.
+Present from the interactive website in `01-presentation/website/`: it is built from `presentation-draft.md` and `presentation-draft.fa.md`, and the audience answers polls and questions on their phones. Run `npm start` in that folder (Node.js 18+, nothing to install). The Persian deck is at `/fa/`, and both languages share one live session, so a mixed room can answer in either language. Its [README](01-presentation/website/README.md) covers presenting, editing and networks, and [PLAN.md](01-presentation/website/PLAN.md) explains the design.
 
 ## How the pieces fit
 

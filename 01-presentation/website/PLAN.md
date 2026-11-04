@@ -1,6 +1,6 @@
 # Plan: the workshop as an interactive website
 
-*The AI-Powered Professional* runs as a website instead of a slide file. The projector shows the deck, the presenter has a private console, and everyone in the room joins on their phone to vote, write and react. This document records what was built and why.
+*The AI-Powered Professional* runs as a website instead of a slide file, in English and Persian. The projector shows the deck, the presenter has a private console, and everyone in the room joins on their phone to vote, write and react. This document records what was built and why.
 
 ## Goals
 
@@ -23,17 +23,22 @@
 | Pacing | Bullets and poll items build one per press. Answers are revealed on a separate press | The presenter controls attention: the room votes first, then sees the answer. |
 | Shrink-to-fit | Dense slides scale down to fit the space, with re-wrapped text | Long draft slides (feature map, before/after prompts) stay readable without editing the content. |
 | Design | Warm off-white canvas, Inter, one accent colour per module, traffic-light colours only where they carry meaning, light and dark themes, reduced-motion support | A calm, professional look for business teams, with module colours as wayfinding through a long day. |
+| Languages | A full Persian deck from a parallel draft (`presentation-draft.fa.md`), Persian config text in `content/locales/fa.js`, interface text in `assets/js/i18n.js`, and Persian pages generated from the English ones. The build refuses a Persian deck that does not match the English one step for step | One design and one codebase for both languages. Because the steps match, both languages share one live session: a mixed room answers in either language into the same results, and the presenter can read notes in one language while the projector shows the other. |
+| Right to left | Layout written with logical CSS properties; slide motion, arrows, timer bars and the ladder follow the reading direction; the keys stay as in PowerPoint (→ moves forward). Vazirmatn is bundled; Persian digits throughout; "،" instead of "·" as a separator, because "·" looks like the Persian zero (۰); no synthetic italics; addresses, paths and product names isolated left to right | Persian should read as a designed deck, not a mirrored English one, and it must work offline like the English deck. |
 
 ## Architecture
 
 ```
-presentation-draft.md ─┐
-content/site-config.js ─┼─ tools/build-deck.js ─► data/deck.json (server) + data/deck.js (browsers)
-                        │
-index.html (projector) ─┤
-presenter.html ─────────┼─ assets/js: core (state) · render · layouts · interactions · sync
-join.html (phones) ─────┘                                       │
-                                                                ▼
+presentation-draft.md ──┐
+presentation-draft.fa.md ┤
+content/site-config.js ──┼─ tools/build-deck.js ─► data/deck.json + deck.js, data/deck.fa.json + deck.fa.js
+content/locales/fa.js ───┘        │ (checks that the two decks match step for step)
+                                  └─ tools/build-pages.js ─► fa/*.html (from the English pages + i18n.js)
+
+index.html (projector) ─┐
+presenter.html ─────────┼─ assets/js: core (state) · i18n · render · layouts · interactions · sync
+join.html (phones) ─────┘  (and the same three pages under fa/)        │
+                                                                        ▼
                       server.js: shared state, answers, reactions, SSE push, .session/ save
 ```
 
@@ -86,6 +91,7 @@ On every slide, phones also have four reactions (👍 got it, ❓ question, 💡
 | Inappropriate open answer | Moderation in the console; the wall shows only the latest answers. |
 | Someone moves the slides from their phone | Control needs the presenter key printed by the server. Phones and screens without it are view only. |
 | Personal data in answers | Answers are anonymous, stored only on the presenter's laptop, and the workshop's own rule (no confidential data) applies. |
+| Persian wording reads as a translation | The Persian text is a careful first translation. A native speaker reviews the draft and `content/locales/fa.js` before the session; the build keeps any edit in step with the English deck. |
 
 ## Verification
 
@@ -93,3 +99,4 @@ On every slide, phones also have four reactions (👍 got it, ❓ question, 💡
 - Browser tests (headless Chromium) with three windows: projector, console and a phone. Navigation sync, progressive reveal, live tallies, shared timers, answer wall, moderation, reactions, reload persistence, overview, help and blackout all passed.
 - No-server mode: the deck opens from a file, honours `#/9` deep links, and the console drives it.
 - A screenshot review of all 61 slides at full reveal, plus the console and phone pages.
+- Persian: all 61 slides, the console and the phone pages reviewed in screenshots; a mixed session where a Persian console drives an English and a Persian deck while an English and a Persian phone vote into the same polls, walls and timers; Persian no-server mode; and a Persian PDF with all 61 pages.

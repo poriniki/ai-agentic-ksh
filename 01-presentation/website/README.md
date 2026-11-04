@@ -1,6 +1,6 @@
 # The AI-Powered Professional: interactive web deck
 
-The workshop deck as a website. The projector shows the slides, you get a private presenter console, and the room joins on their phones to vote, write answers and react. See [PLAN.md](PLAN.md) for the design decisions and the full interaction map.
+The workshop deck as a website, in English and Persian (فارسی). The projector shows the slides, you get a private presenter console, and the room joins on their phones to vote, write answers and react. See [PLAN.md](PLAN.md) for the design decisions and the full interaction map.
 
 Requires **Node.js 18 or newer**. There are no packages to install.
 
@@ -12,13 +12,13 @@ In this folder:
 npm start
 ```
 
-The server prints three links:
+The server prints three links, and the same three for the Persian version:
 
-| Link | Open it on |
-| --- | --- |
-| `http://<laptop-ip>:3000/?key=…` | The projector (the deck). The key lets this window move the slides. |
-| `http://<laptop-ip>:3000/presenter.html?key=…` | Your laptop screen or a tablet (notes, timers, answers). |
-| `http://<laptop-ip>:3000/join` | Everyone's phone. The deck shows it as a QR code. |
+| Link | Persian | Open it on |
+| --- | --- | --- |
+| `http://<laptop-ip>:3000/?key=…` | `/fa/?key=…` | The projector (the deck). The key lets this window move the slides. |
+| `http://<laptop-ip>:3000/presenter.html?key=…` | `/fa/presenter.html?key=…` | Your laptop screen or a tablet (notes, timers, answers). |
+| `http://<laptop-ip>:3000/join` | `/fa/join` | Everyone's phone. The deck shows it as a QR code. |
 
 Keep the key private: anyone with it can move the slides. Use `AIPRO_KEY=yourkey npm start` for a fixed key and `PORT=8080 npm start` for another port. Answers are saved in `.session/` (not committed), so a restart continues where you were. Start a clean session with:
 
@@ -50,15 +50,26 @@ Swipe left or right on a touch screen. Presentation clickers that send PageDown 
 
 **On phones:** the current question appears automatically. Answers are anonymous. People can change their vote until you reveal the answer. Four reactions (👍 ❓ 💡 🐢) are always available, and "Read the slide text" helps people far from the screen.
 
+## Persian version (فارسی)
+
+The Persian deck has the same slides, timings, build steps and questions as the English one, translated in full, including the speaker notes. Both languages run in **one live session**: you can present in Persian while the projector shows English (or the other way round), and phones can answer in either language. The answers are counted together.
+
+- **Switching language:** the console has a link in its header, the deck's keyboard help (**?**) links to the same slide in the other language, and phones have a link at the top of the page. The presenter key carries over.
+- **Keys:** → (or Space) still moves forward and ← moves back, as in PowerPoint in Persian. The slide motion and the on-screen arrows follow the right-to-left direction.
+- **Type:** [Vazirmatn](https://github.com/rastikerdar/vazirmatn) is bundled, so the Persian pages look the same offline. Numbers use Persian digits; addresses, file paths and product names stay left to right.
+
+The translation is a first pass: have a native speaker review `../presentation-draft.fa.md` and `content/locales/fa.js` before presenting.
+
 ## Without the server
 
-Open `index.html` directly in a browser. The deck, the speaker notes (press **P**) and the timers all work. Windows on the same laptop stay in sync. Phones cannot join, and the deck says so on the interactive slides.
+Open `index.html` (or `fa/index.html`) directly in a browser. The deck, the speaker notes (press **P**) and the timers all work. Windows on the same laptop stay in sync. Phones cannot join, and the deck says so on the interactive slides.
 
 ## Editing
 
 1. Change the words in [`../presentation-draft.md`](../presentation-draft.md). Keep its structure: `## Slide N — Title`, the `**Time:** … · **Type:** …` line, then `**On slide:**`, `**Visual:**` and `**Speaker notes:**`.
-2. Change a layout or an interaction in [`content/site-config.js`](content/site-config.js). The comment at the top lists the layouts and interaction types.
-3. Rebuild and verify:
+2. Make the same change in the Persian draft, [`../presentation-draft.fa.md`](../presentation-draft.fa.md). It uses Persian labels (`## اسلاید N — …`, `**زمان:**`, `**نوع:**`, `**روی اسلاید:**`, `**تصویر:**`, `**یادداشت‌های ارائه‌دهنده:**`) but the same structure: the same slides, timings, and number of bullets and table rows.
+3. Change a layout or an interaction in [`content/site-config.js`](content/site-config.js). The comment at the top lists the layouts and interaction types. Poll questions and options, open-question prompts, timer labels and the words inside visuals also need their Persian text in [`content/locales/fa.js`](content/locales/fa.js).
+4. Rebuild and verify:
 
 ```bash
 npm run build
@@ -68,7 +79,7 @@ npm run build
 npm run check
 ```
 
-`npm run build` stops with a clear message if the draft or the config has a problem (for example a poll answer that points at a missing option). Commit `data/deck.json` and `data/deck.js` together with your change. Text in square brackets, such as `[date]`, is highlighted on the slides and listed in the console under "Fill-ins on this slide" so nothing is left unfilled.
+`npm run build` stops with a clear message if the draft or the config has a problem (for example a poll answer that points at a missing option), if a Persian string is missing, or if the two decks no longer match step for step. It also regenerates the Persian pages in `fa/` from the English pages and the interface strings in `assets/js/i18n.js`, so edit the English pages, never the files in `fa/`. Commit the generated files (`data/`, `fa/`) together with your change. Text in square brackets, such as `[date]` or `[تاریخ]`, is highlighted on the slides and listed in the console under "Fill-ins on this slide" so nothing is left unfilled.
 
 ## Networks
 
@@ -79,21 +90,25 @@ npm run check
 
 ## Printing and PDF
 
-Open the deck in Chrome or Edge, print, and choose **Save as PDF** with background graphics on. Each slide prints on its own page with every build step shown.
+Open the deck (`index.html` or `fa/index.html`) in Chrome or Edge, print, and choose **Save as PDF** with background graphics on. Each slide prints on its own page with every build step shown, and with the answers collected so far, so the PDF also works as a handout after the session.
 
 ## Files
 
 | Path | What it is |
 | --- | --- |
 | `index.html`, `presenter.html`, `join.html` | The three pages |
+| `fa/index.html`, `fa/presenter.html`, `fa/join.html` | The Persian pages (generated from the three above) |
 | `assets/js/core.js` | Shared state rules used by the browsers and the server |
+| `assets/js/i18n.js` | Interface text in English and Persian, Persian digits |
 | `assets/js/render.js`, `layouts.js`, `interactions.js` | Slide rendering, layouts, polls, walls and timers |
 | `assets/js/sync.js` | Connection to the server, or the same-browser fallback |
 | `assets/js/deck.js`, `presenter.js`, `audience.js` | Page logic |
-| `assets/css/site.css` | All styles |
+| `assets/css/site.css` | All styles, including right-to-left |
+| `assets/fonts/` | Vazirmatn, the Persian font, and its licence |
 | `content/site-config.js` | Layouts and interactions per slide |
-| `data/deck.json`, `data/deck.js` | Generated deck data (do not edit by hand) |
-| `tools/build-deck.js`, `tools/check-deck.js` | Build and check |
+| `content/locales/fa.js` | Persian text for polls, timers and visuals |
+| `data/deck.json`, `data/deck.js`, `data/deck.fa.json`, `data/deck.fa.js` | Generated deck data (do not edit by hand) |
+| `tools/build-deck.js`, `tools/build-pages.js`, `tools/check-deck.js` | Build, Persian pages, and check |
 | `server.js` | Live server |
 
 ## Troubleshooting
@@ -109,4 +124,5 @@ Open the deck in Chrome or Edge, print, and choose **Save as PDF** with backgrou
 ## Third-party code
 
 - QR codes: [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) by Kazuhiko Arase, MIT licence (`assets/vendor/qrcode.js`).
-- Font: [Inter](https://rsms.me/inter/), SIL Open Font License, loaded from Google Fonts when online; system fonts are used offline.
+- Font: [Inter](https://rsms.me/inter/), SIL Open Font License, loaded from Google Fonts when online on the English pages; system fonts are used offline.
+- Persian font: [Vazirmatn](https://github.com/rastikerdar/vazirmatn) by Saber Rastikerdar, SIL Open Font License 1.1, bundled in `assets/fonts/` with its licence (`OFL-Vazirmatn.txt`).

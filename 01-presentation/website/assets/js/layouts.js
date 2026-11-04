@@ -12,6 +12,7 @@
   var R = ns.render;
   var el = R.el;
   var plainOf = R.plainOf;
+  var I = ns.i18n;
   var NS = 'http://www.w3.org/2000/svg';
 
   function svg(tag, attrs) {
@@ -34,10 +35,11 @@
     return s;
   }
 
+  // "Module 1 · How AI really works" → "M1"; "ماژول ۱: …" → "ماژول ۱"; "Opening" stays.
   function shortModule(name) {
-    var m = /^Module (\d)/.exec(name);
-    if (m) return 'M' + m[1];
-    return name;
+    var head = String(name).split(/ · |: /)[0];
+    var m = /^(?:Module|ماژول)\s*([0-9۰-۹]+)$/.exec(head);
+    return m ? I.t('timeline.module', { n: m[1] }) : head;
   }
 
   // ---- Visuals ----------------------------------------------------------------
@@ -46,41 +48,39 @@
       return el('div', { cls: 'nw-row' }, [
         el('span', { cls: 'nw-word', text: c.word }),
         el('span', { cls: 'nw-track' }, [el('span', { cls: 'nw-fill', style: { width: c.pct + '%' } })]),
-        el('span', { cls: 'nw-pct', text: c.pct + '%' })
+        el('span', { cls: 'nw-pct', text: I.percent(c.pct) })
       ]);
     });
     return el('div', { cls: 'visual visual-next-word' }, [
-      el('p', { cls: 'nw-label', text: 'What comes next?' }),
+      v.label ? el('p', { cls: 'nw-label', text: v.label }) : null,
       el('div', { cls: 'nw-sentence' }, [el('span', { text: v.sentence + ' ' }), el('span', { cls: 'nw-blank', text: '___' })]),
       el('div', { cls: 'nw-list' }, rows),
       v.note ? el('p', { cls: 'nw-note', text: v.note }) : null
     ]);
   }
 
-  function desk() {
+  function desk(v) {
     return el('div', { cls: 'visual visual-desk' }, [
       el('div', { cls: 'desk desk-set' }, [
-        el('p', { cls: 'desk-label', text: 'Project: desk already set up' }),
-        el('div', { cls: 'papers' }, [
-          el('div', { cls: 'paper p1', text: 'Prompt' }),
-          el('div', { cls: 'paper p2', text: 'Files' }),
-          el('div', { cls: 'paper p3', text: 'Instructions' })
-        ])
+        el('p', { cls: 'desk-label', text: v.set }),
+        el('div', { cls: 'papers' }, (v.papers || []).map(function (text, i) {
+          return el('div', { cls: 'paper p' + (i + 1), text: text });
+        }))
       ]),
       el('div', { cls: 'desk desk-empty' }, [
-        el('p', { cls: 'desk-label', text: 'New chat: empty desk' }),
-        el('div', { cls: 'empty-area', text: 'Nothing here yet' })
+        el('p', { cls: 'desk-label', text: v.empty }),
+        el('div', { cls: 'empty-area', text: v.emptyNote })
       ])
     ]);
   }
 
   function artifact(v) {
     return el('div', { cls: 'visual visual-artifact' }, [
-      el('div', { cls: 'chat-bubble', text: 'Build me a break-even calculator I can change.' }),
+      el('div', { cls: 'chat-bubble', text: v.prompt }),
       el('div', { cls: 'artifact-card' }, [
         el('div', { cls: 'artifact-title', text: v.title }),
         el('ul', { cls: 'artifact-lines' }, (v.lines || []).map(function (line) { return el('li', { text: line }); })),
-        el('div', { cls: 'artifact-tag', text: 'Artifact · beside the chat' })
+        v.tag ? el('div', { cls: 'artifact-tag', text: v.tag }) : null
       ])
     ]);
   }
@@ -91,21 +91,26 @@
       return el('div', {
         cls: 'tl-seg tl-' + m.theme,
         style: { 'flex-grow': String(width) },
-        attrs: { title: m.name + ' · ' + m.start + '–' + m.end }
+        attrs: { title: m.name + I.t('sep') + I.digits(m.start + '–' + m.end) }
       }, [
         width >= 15 ? el('span', { cls: 'tl-label', text: shortModule(m.name) }) : null,
-        width >= 15 ? el('span', { cls: 'tl-time', text: m.start }) : null
+        width >= 15 ? el('span', { cls: 'tl-time', text: I.digits(m.start) }) : null
       ]);
     });
+    var first = modules.length ? modules[0].startMin : 0;
+    var last = modules.length ? modules[modules.length - 1].endMin : 0;
+    var hhmm = function (min) { return Math.floor(min / 60) + ':' + ('0' + (min % 60)).slice(-2); };
     return el('div', { cls: 'visual visual-timeline' }, [
       el('div', { cls: 'tl-track' }, segs),
-      el('div', { cls: 'tl-axis' }, [el('span', { text: '0:00' }), el('span', { text: '2:00' }), el('span', { text: '4:00' })])
+      el('div', { cls: 'tl-axis' }, [first, Math.round((first + last) / 2), last].map(function (min) {
+        return el('span', { text: I.digits(hhmm(min)) });
+      }))
     ]);
   }
 
   function flowSteps(v) {
     var steps = v.steps.map(function (text, i) {
-      return el('div', { cls: 'vf-step' }, [el('span', { cls: 'vf-num', text: String(i + 1) }), el('span', { cls: 'vf-text', text: text })]);
+      return el('div', { cls: 'vf-step' }, [el('span', { cls: 'vf-num', text: I.digits(i + 1) }), el('span', { cls: 'vf-text', text: text })]);
     });
     var out = [];
     steps.forEach(function (s, i) {
@@ -113,7 +118,7 @@
       if (i < steps.length - 1) out.push(el('span', { cls: 'vf-arrow', attrs: { 'aria-hidden': 'true' }, text: '→' }));
     });
     var node = el('div', { cls: 'visual visual-flow' + (v.loop ? ' is-loop' : '') }, [el('div', { cls: 'vf-row' }, out)]);
-    if (v.loop) node.appendChild(el('p', { cls: 'vf-loop', text: '↺ Repeat with feedback until it is good enough' }));
+    if (v.loop && v.loopNote) node.appendChild(el('p', { cls: 'vf-loop', text: '↺ ' + v.loopNote }));
     return node;
   }
 
@@ -121,7 +126,7 @@
     var v = slide.visual;
     if (!v) return null;
     if (v.kind === 'next-word') return { node: nextWord(v), place: 'right' };
-    if (v.kind === 'desk') return { node: desk(), place: 'right' };
+    if (v.kind === 'desk') return { node: desk(v), place: 'right' };
     if (v.kind === 'artifact') return { node: artifact(v), place: 'right' };
     if (v.kind === 'timeline') return { node: timeline(ns.deckModules || []), place: 'bottom' };
     if (v.kind === 'flow') return { node: flowSteps(v), place: 'bottom' };
@@ -199,7 +204,7 @@
     if (item.checked !== null && item.checked !== undefined) {
       badge = el('span', { cls: 'card-check' + (item.checked ? ' is-checked' : ''), attrs: { 'aria-hidden': 'true' }, text: item.checked ? '✓' : '' });
     } else if (ordered) {
-      badge = el('span', { cls: 'card-num', text: String(index) });
+      badge = el('span', { cls: 'card-num', text: I.digits(index) });
     } else {
       badge = el('span', { cls: 'card-dot', attrs: { 'aria-hidden': 'true' } });
     }
@@ -421,7 +426,7 @@
       var parts = leadOf(it, slide.splitHeadings);
       var tone = (slide.tones || [])[i] || ['indigo', 'teal', 'violet', 'sky'][i % 4];
       return el('div', { cls: 'col column-card tone-' + tone + (slide.builds ? ' frag' : '') }, [
-        el('h3', { cls: 'col-head' }, [parts.lead ? R.inline(parts.lead) : el('span', { text: 'Option ' + (i + 1) })]),
+        el('h3', { cls: 'col-head' }, [parts.lead ? R.inline(parts.lead) : el('span', { text: I.t('col.option', { n: i + 1 }) })]),
         el('div', { cls: 'col-text' }, [R.inline(parts.rest)])
       ]);
     });
@@ -507,14 +512,16 @@
     slide.blocks.forEach(function (b) {
       if (b.t === 'p') intro.push(el('p', { cls: 'flow-intro' }, [R.inline(b.c)]));
     });
-    var tone = function (who) {
+    // Tones come from the config (flowTones) so they do not depend on the language.
+    var tone = function (who, i) {
+      if (slide.flowTones && slide.flowTones[i]) return slide.flowTones[i];
       if (/^AI does/i.test(who)) return 'green';
       if (/draft/i.test(who)) return 'amber';
       return 'grey';
     };
-    var steps = table ? table.rows.map(function (row) {
+    var steps = table ? table.rows.map(function (row, i) {
       var who = plainOf(row[cols.who] || []);
-      return el('div', { cls: 'flow-step tone-' + tone(who) + (slide.buildRows ? ' frag' : '') }, [
+      return el('div', { cls: 'flow-step tone-' + tone(who, i) + (slide.buildRows ? ' frag' : '') }, [
         el('div', { cls: 'flow-num', text: plainOf(row[0] || []) }),
         el('div', { cls: 'flow-title' }, [R.inline(row[cols.title] || [])]),
         el('div', { cls: 'flow-who', text: who }),
@@ -522,9 +529,9 @@
       ]);
     }) : [];
     var legend = el('div', { cls: 'flow-legend' }, [
-      el('span', { cls: 'lg tone-green', text: 'AI does it' }),
-      el('span', { cls: 'lg tone-amber', text: 'AI drafts, you review' }),
-      el('span', { cls: 'lg tone-grey', text: 'You do it' })
+      el('span', { cls: 'lg tone-green', text: I.t('flow.green') }),
+      el('span', { cls: 'lg tone-amber', text: I.t('flow.amber') }),
+      el('span', { cls: 'lg tone-grey', text: I.t('flow.grey') })
     ]);
     var foot = handles.map(function (e) { return e.handle.el; });
     var body = el('div', { cls: 'flow' }, [
@@ -551,14 +558,14 @@
       var ln = lines[i];
       var first = ln.kind === 'line' ? ln.spans[0] : null;
       var label = first && first.k === 'strong' ? plainOf(first.c) : '';
-      var m = /^(.*?)\s*\b(before|after)\b\s*:?\s*$/i.exec(label);
+      var m = /^(.*?)[\s,،]*(before|after|قبل|بعد)\s*[:：]?\s*$/i.exec(label);
       if (!m) {
         if (ln.kind === 'line') other.push(el('p', { cls: 'intro' }, [R.inline(ln.spans)]));
         else if (ln.kind === 'other') R.blocks([ln.block], { frag: slide.builds }).forEach(function (n) { other.push(n); });
         continue;
       }
-      var group = m[1].trim();
-      var side = m[2].toLowerCase();
+      var group = m[1].replace(/[\s,،:-]+$/, '').trim();
+      var side = /^(after|بعد)$/i.test(m[2]) ? 'after' : 'before';
       if (!groups[group]) {
         groups[group] = { name: group, before: null, after: null };
         order.push(group);
@@ -585,8 +592,8 @@
       return el('div', { cls: 'pair-row' }, [
         name ? el('h3', { cls: 'pair-name', text: name }) : null,
         el('div', { cls: 'pair-cols' }, [
-          el('div', { cls: 'pair-card is-before' }, [el('span', { cls: 'pair-tag', text: 'Before' }), content(g.before)]),
-          el('div', { cls: 'pair-card is-after' }, [el('span', { cls: 'pair-tag', text: 'After' }), content(g.after)])
+          el('div', { cls: 'pair-card is-before' }, [el('span', { cls: 'pair-tag', text: I.t('pairs.before') }), content(g.before)]),
+          el('div', { cls: 'pair-card is-after' }, [el('span', { cls: 'pair-tag', text: I.t('pairs.after') }), content(g.after)])
         ])
       ]);
     });

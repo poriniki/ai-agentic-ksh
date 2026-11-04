@@ -70,11 +70,29 @@ module.exports = {
 
     7: { layout: 'cards' },
 
-    8: { layout: 'stack', visual: { kind: 'next-word', sentence: 'The quarterly results show a', candidates: [{ word: 'strong', pct: 46 }, { word: 'mixed', pct: 31 }, { word: 'record', pct: 12 }], note: 'Illustrative probabilities. A model ranks the next word, it does not look up the answer.' } },
+    8: {
+      layout: 'stack',
+      visual: {
+        kind: 'next-word',
+        label: 'What comes next?',
+        sentence: 'The quarterly results show a',
+        candidates: [{ word: 'strong', pct: 46 }, { word: 'mixed', pct: 31 }, { word: 'record', pct: 12 }],
+        note: 'Illustrative probabilities. A model ranks the next word, it does not look up the answer.'
+      }
+    },
 
     9: { layout: 'cards' },
 
-    10: { layout: 'stack', visual: { kind: 'desk' } },
+    10: {
+      layout: 'stack',
+      visual: {
+        kind: 'desk',
+        set: 'Project: desk already set up',
+        papers: ['Prompt', 'Files', 'Instructions'],
+        empty: 'New chat: empty desk',
+        emptyNote: 'Nothing here yet'
+      }
+    },
 
     11: { layout: 'stack' },
 
@@ -151,7 +169,15 @@ module.exports = {
 
     22: { layout: 'cards' },
 
-    23: { layout: 'stack', visual: { kind: 'flow', steps: ['Brief', 'Draft', 'Specific feedback', 'Better draft'], loop: true } },
+    23: {
+      layout: 'stack',
+      visual: {
+        kind: 'flow',
+        steps: ['Brief', 'Draft', 'Specific feedback', 'Better draft'],
+        loop: true,
+        loopNote: 'Repeat with feedback until it is good enough'
+      }
+    },
 
     24: { layout: 'cards' },
 
@@ -215,6 +241,8 @@ module.exports = {
       layout: 'stack',
       visual: {
         kind: 'artifact',
+        prompt: 'Build me a break-even calculator I can change.',
+        tag: 'Artifact · beside the chat',
         title: 'Break-even calculator',
         lines: ['Price per unit: 40', 'Variable cost per unit: 16', 'Fixed cost per month: 12,000', 'Break-even: 500 units']
       }
@@ -240,7 +268,13 @@ module.exports = {
 
     39: { layout: 'columns', columns: 2, splitHeadings: true },
 
-    40: { layout: 'flow', buildRows: true, flowCols: { title: 1, who: 2, detail: 3 } },
+    40: {
+      layout: 'flow',
+      buildRows: true,
+      flowCols: { title: 1, who: 2, detail: 3 },
+      // One tone per step: green = AI does it, amber = AI drafts and you review, grey = you do it
+      flowTones: ['grey', 'green', 'green', 'amber', 'amber', 'green', 'grey']
+    },
 
     41: {
       layout: 'stack',

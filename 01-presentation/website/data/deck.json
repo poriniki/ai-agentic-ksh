@@ -1,12 +1,14 @@
 {
  "version": 1,
+ "lang": "en",
+ "dir": "ltr",
  "title": "The AI-Powered Professional",
  "subtitle": "From Chat User to AI Operator: practical AI for Marketing, Business and Finance teams",
  "source": "presentation-draft.md",
  "meta": {
   "slideCount": 61,
   "sourceHash": "459905958368c732",
-  "configHash": "e2d6bc449bf6b715"
+  "configHash": "b22305eabfba3931"
  },
  "modules": [
   {
@@ -162,6 +164,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": false,
    "blocks": [
@@ -277,6 +280,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -426,6 +430,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -540,6 +545,7 @@
    "callout": false,
    "splitHeadings": true,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -633,6 +639,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {
     "1": "Most people today",
     "3": "Goal",
@@ -882,6 +889,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -1044,6 +1052,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -1174,6 +1183,7 @@
    "placement": null,
    "visual": {
     "kind": "next-word",
+    "label": "What comes next?",
     "sentence": "The quarterly results show a",
     "candidates": [
      {
@@ -1202,6 +1212,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -1389,6 +1400,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -1504,7 +1516,15 @@
    "layout": "stack",
    "placement": null,
    "visual": {
-    "kind": "desk"
+    "kind": "desk",
+    "set": "Project: desk already set up",
+    "papers": [
+     "Prompt",
+     "Files",
+     "Instructions"
+    ],
+    "empty": "New chat: empty desk",
+    "emptyNote": "Nothing here yet"
    },
    "listStyles": [
     "bullets"
@@ -1517,6 +1537,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -1644,6 +1665,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -1826,6 +1848,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -1967,6 +1990,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -2109,7 +2133,7 @@
      "prompt": "Name one task inside the frontier, and one task outside it.",
      "display": "wall",
      "maxLength": 200,
-     "placeholder": "Type your answer"
+     "placeholder": ""
     }
    ]
   },
@@ -2142,6 +2166,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -2269,6 +2294,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -2346,6 +2372,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -2552,6 +2579,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -2762,6 +2790,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -2947,6 +2976,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -3170,6 +3200,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -3358,6 +3389,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -3502,6 +3534,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -3697,7 +3730,8 @@
      "Specific feedback",
      "Better draft"
     ],
-    "loop": true
+    "loop": true,
+    "loopNote": "Repeat with feedback until it is good enough"
    },
    "listStyles": [
     "bullets"
@@ -3710,6 +3744,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -3888,6 +3923,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -4076,6 +4112,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -4218,6 +4255,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -4375,6 +4413,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -4496,6 +4535,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -4570,6 +4610,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -4704,6 +4745,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -4967,6 +5009,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -5123,6 +5166,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -5274,6 +5318,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -5442,6 +5487,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -5591,6 +5637,8 @@
    "placement": null,
    "visual": {
     "kind": "artifact",
+    "prompt": "Build me a break-even calculator I can change.",
+    "tag": "Artifact · beside the chat",
     "title": "Break-even calculator",
     "lines": [
      "Price per unit: 40",
@@ -5610,6 +5658,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -5738,6 +5787,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -5924,6 +5974,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -6050,6 +6101,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -6153,7 +6205,7 @@
      "prompt": "Paste one short prompt, instruction or checklist you think the team should share.",
      "display": "wall",
      "maxLength": 240,
-     "placeholder": "Type your answer"
+     "placeholder": ""
     }
    ]
   },
@@ -6186,6 +6238,7 @@
    "callout": false,
    "splitHeadings": true,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -6297,6 +6350,15 @@
     "who": 2,
     "detail": 3
    },
+   "flowTones": [
+    "grey",
+    "green",
+    "green",
+    "amber",
+    "amber",
+    "green",
+    "grey"
+   ],
    "marks": {},
    "builds": true,
    "blocks": [
@@ -6585,6 +6647,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -6833,6 +6896,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -7024,6 +7088,7 @@
    "callout": false,
    "splitHeadings": true,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -7196,6 +7261,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -7352,6 +7418,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -7527,6 +7594,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -7589,7 +7657,7 @@
      "prompt": "Your biggest time saving, in a few words",
      "display": "cloud",
      "maxLength": 60,
-     "placeholder": "Type your answer"
+     "placeholder": ""
     }
    ]
   },
@@ -7622,6 +7690,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -7696,6 +7765,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -7831,6 +7901,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -8009,6 +8080,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -8188,6 +8260,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -8250,7 +8323,7 @@
      "prompt": "What question did the AI ask that you hadn't thought of?",
      "display": "wall",
      "maxLength": 200,
-     "placeholder": "Type your answer"
+     "placeholder": ""
     }
    ]
   },
@@ -8283,6 +8356,7 @@
    "callout": true,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -8421,6 +8495,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -8647,6 +8722,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -8857,6 +8933,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -9005,6 +9082,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [],
@@ -9082,6 +9160,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -9288,6 +9367,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -9371,7 +9451,7 @@
      "prompt": "Team name, and the first names of your members",
      "display": "wall",
      "maxLength": 120,
-     "placeholder": "Type your answer"
+     "placeholder": ""
     }
    ]
   },
@@ -9404,6 +9484,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -9598,6 +9679,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -9724,7 +9806,7 @@
      "prompt": "Next week I will use AI for ___ at Level ___.",
      "display": "wall",
      "maxLength": 140,
-     "placeholder": "Type your answer"
+     "placeholder": ""
     }
    ]
   },
@@ -9755,6 +9837,7 @@
    "callout": false,
    "splitHeadings": false,
    "flowCols": null,
+   "flowTones": null,
    "marks": {},
    "builds": true,
    "blocks": [
@@ -9827,7 +9910,7 @@
      "prompt": "Your question for the room",
      "display": "wall",
      "maxLength": 200,
-     "placeholder": "Type your answer"
+     "placeholder": ""
     }
    ]
   }

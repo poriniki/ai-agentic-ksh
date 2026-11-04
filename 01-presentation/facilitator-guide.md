@@ -21,7 +21,8 @@ Recommended load if time is limited: homework + **one** project. The team projec
 **One week before**
 - [ ] Confirm participant list and their team (Marketing / Business / Finance)
 - [ ] Confirm every participant can log in to the approved AI tool (and has Projects / file upload available on their plan)
-- [ ] Adapt Slides 7, 30 and 53 to your company's tools and policy
+- [ ] Adapt Slides 7, 30 and 53 to your company's tools and policy (in `presentation-draft.fa.md` too if you present in Persian, then run `npm run build` in `website/`)
+- [ ] Presenting in Persian? Have a native speaker read `presentation-draft.fa.md` and the poll texts in `website/content/locales/fa.js` once
 - [ ] Fill dates and submission channel into the assignment files
 - [ ] Send participants a short pre-read: "Bring one recurring task you do every week or month"
 - [ ] Run the interactive website once on the laptop you will present from (`website/`, `npm start`) and join from a phone (see `website/README.md`)

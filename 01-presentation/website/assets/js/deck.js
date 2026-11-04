@@ -10,6 +10,7 @@
   var core = ns.core;
   var sync = ns.sync;
   var L = ns.layouts;
+  var I = ns.i18n;
   var deck = window.AIPRO_DECK;
   var N = deck.slides.length;
   var LAST = N - 1;
@@ -79,7 +80,7 @@
           el('span', { text: data.moduleName })
         ]),
         el('h2', { cls: 'slide-title' + (data.title.length > 44 ? ' is-xlong' : data.title.length > 30 ? ' is-long' : ''), text: data.title }),
-        el('span', { cls: 'slide-count', text: data.n + ' / ' + N })
+        el('span', { cls: 'slide-count', text: I.t('slide.count', { n: data.n, total: N }) })
       ]);
     }
     var fit = el('div', { cls: 'fit' }, [rendered.body]);
@@ -88,17 +89,17 @@
       ? el('div', { cls: 'join-badge' }, [
         el('div', { cls: 'join-qr', attrs: { 'data-role': 'qr' } }),
         el('div', { cls: 'join-text' }, [
-          el('span', { cls: 'join-label', text: 'Join on your phone' }),
+          el('span', { cls: 'join-label', text: I.t('join.label') }),
           el('span', { cls: 'join-url', attrs: { 'data-role': 'url' }, text: '' })
         ])
       ])
       : null;
-    var typeLabel = data.layout === 'title' ? data.moduleName : data.type + (data.typeDetail ? ' · ' + data.typeDetail : '');
+    var typeLabel = data.layout === 'title' ? data.moduleName : data.type + (data.typeDetail ? I.t('sep') + data.typeDetail : '');
     var foot = el('footer', { cls: 'slide-foot' }, [
       el('span', { cls: 'foot-type', text: typeLabel }),
       el('div', { cls: 'foot-right' }, [
         joinBadge,
-        el('span', { cls: 'foot-time', text: data.time.start + '–' + data.time.end })
+        el('span', { cls: 'foot-time', text: I.digits(data.time.start + '–' + data.time.end) })
       ])
     ]);
     var inner = el('div', { cls: 'slide-inner' }, [head, body, foot]);
@@ -107,7 +108,7 @@
       attrs: {
         'data-n': String(data.n),
         'aria-roledescription': 'slide',
-        'aria-label': 'Slide ' + data.n + ' of ' + N + ': ' + data.title
+        'aria-label': I.t('slide.aria', { n: data.n, total: N, title: data.title })
       }
     }, [inner]);
     return {
@@ -257,17 +258,17 @@
 
   // ---- Connection status and join info ---------------------------------
   function updateConn(status) {
-    var text = 'Connecting…';
+    var text = I.t('status.connecting');
     var cls = '';
     if (status === 'live') {
       var n = snap && snap.connections ? snap.connections : 1;
-      text = '● Live · ' + n + ' screen' + (n === 1 ? '' : 's') + (sync.hasKey() ? '' : ' · view only');
+      text = I.tn('status.live', n) + (sync.hasKey() ? '' : I.t('status.viewOnly'));
       cls = 'is-live';
     } else if (status === 'reconnecting') {
-      text = '○ Reconnecting to the server…';
+      text = I.t('status.reconnecting');
       cls = 'is-warn';
     } else if (status === 'local') {
-      text = 'Local mode · start the server for audience phones';
+      text = I.t('status.local');
       cls = 'is-local';
     }
     conn.textContent = text;
@@ -289,7 +290,7 @@
         if (svg) qrEl.appendChild(svg);
         s.joinBadge.classList.remove('is-offline');
       } else {
-        urlEl.textContent = 'Needs the live server (npm start)';
+        urlEl.textContent = I.t('join.needsServer');
         s.joinBadge.classList.add('is-offline');
       }
     });
@@ -297,12 +298,12 @@
     if (cover) {
       cover.textContent = '';
       if (url) {
-        cover.appendChild(el('span', { cls: 'cover-join-label', text: 'Join the live polls on your phone' }));
+        cover.appendChild(el('span', { cls: 'cover-join-label', text: I.t('join.cover') }));
         cover.appendChild(el('span', { cls: 'cover-join-url', text: url.replace(/^https?:\/\//, '') }));
         var coverQr = qrSvg(url);
         if (coverQr) cover.appendChild(el('span', { cls: 'cover-qr' }, [coverQr]));
       } else {
-        cover.appendChild(el('span', { cls: 'cover-join-label', text: 'Live polls need the server: run npm start' }));
+        cover.appendChild(el('span', { cls: 'cover-join-label', text: I.t('join.coverOffline') }));
       }
     }
   }
@@ -310,11 +311,11 @@
   // ---- Navigation -------------------------------------------------------------
   function go(action) {
     if (!canControl()) {
-      toast('View only. Open the presenter link to move the slides.');
+      toast(I.t('toast.viewOnly'));
       return;
     }
     sync.command(action).catch(function (err) {
-      toast(err.message || 'Could not move the slides.');
+      toast(err && err.code ? I.t('err.' + err.code) : I.t('toast.moveFailed'));
     });
   }
 
@@ -339,7 +340,7 @@
           }
         }
       }, [
-        el('span', { cls: 'ov-num', text: String(s.n) }),
+        el('span', { cls: 'ov-num', text: I.digits(s.n) }),
         el('span', { cls: 'ov-title', text: s.title }),
         el('span', { cls: 'ov-mod', text: s.moduleName })
       ]));
@@ -351,7 +352,7 @@
     overlay.hidden = false;
     overlayBody.textContent = '';
     if (name === 'overview') {
-      overlayBody.appendChild(el('h2', { cls: 'ov-heading', text: 'All slides' }));
+      overlayBody.appendChild(el('h2', { cls: 'ov-heading', text: I.t('overview.title') }));
       overlayBody.appendChild(overviewGrid);
       var current = overviewGrid.querySelector('[data-index="' + state.slide + '"]');
       if (current) {
@@ -361,7 +362,7 @@
     } else if (name === 'goto') {
       var input = el('input', {
         cls: 'goto-input',
-        attrs: { type: 'number', min: '1', max: String(N), value: String(state.slide + 1), 'aria-label': 'Slide number' }
+        attrs: { type: 'number', min: '1', max: String(N), value: String(state.slide + 1), 'aria-label': I.t('goto.label') }
       });
       input.addEventListener('keydown', function (e) {
         if (e.key !== 'Enter') return;
@@ -371,30 +372,20 @@
           gotoSlide(n - 1);
         }
       });
-      overlayBody.appendChild(el('h2', { cls: 'ov-heading', text: 'Go to slide' }));
-      overlayBody.appendChild(el('div', { cls: 'goto-row' }, [input, el('span', { cls: 'goto-hint', text: 'Press Enter' })]));
+      overlayBody.appendChild(el('h2', { cls: 'ov-heading', text: I.t('goto.title') }));
+      overlayBody.appendChild(el('div', { cls: 'goto-row' }, [input, el('span', { cls: 'goto-hint', text: I.t('goto.hint') })]));
       setTimeout(function () { input.focus(); input.select(); }, 0);
     } else if (name === 'help') {
-      var rows = [
-        ['→  Space  Enter', 'Next step or slide'],
-        ['←  Backspace', 'Previous step or slide'],
-        ['Home  End', 'First or last slide'],
-        ['O', 'All slides'],
-        ['G', 'Go to a slide number'],
-        ['Q', 'Join QR code for the audience'],
-        ['B  .', 'Blackout, for breaks'],
-        ['T', 'Light or dark theme'],
-        ['F', 'Full screen'],
-        ['P', 'Presenter console (notes and timers)'],
-        ['Esc', 'Close this panel']
-      ];
-      overlayBody.appendChild(el('h2', { cls: 'ov-heading', text: 'Keyboard' }));
-      overlayBody.appendChild(el('dl', { cls: 'help-list' }, rows.map(function (r) {
-        return el('div', { cls: 'help-row' }, [el('dt', { text: r[0] }), el('dd', { text: r[1] })]);
+      overlayBody.appendChild(el('h2', { cls: 'ov-heading', text: I.t('help.title') }));
+      overlayBody.appendChild(el('dl', { cls: 'help-list' }, I.t('help.rows').map(function (r) {
+        return el('div', { cls: 'help-row' }, [el('dt', { attrs: { dir: 'ltr' }, text: r[0] }), el('dd', { text: r[1] })]);
       })));
+      overlayBody.appendChild(el('p', { cls: 'ov-note' }, [
+        el('a', { attrs: { href: otherLanguageUrl(), hreflang: I.t('lang.otherCode') }, text: I.t('help.otherLanguage') })
+      ]));
     } else if (name === 'join') {
       var url = sync.joinUrl();
-      overlayBody.appendChild(el('h2', { cls: 'ov-heading', text: 'Join on your phone' }));
+      overlayBody.appendChild(el('h2', { cls: 'ov-heading', text: I.t('join.label') }));
       if (url) {
         overlayBody.appendChild(el('div', { cls: 'join-big' }, [
           qrSvg(url),
@@ -403,10 +394,16 @@
       } else {
         overlayBody.appendChild(el('p', {
           cls: 'ov-note',
-          text: 'Audience phones need the live server. Run "npm start" in the website folder, then reload this page.'
+          text: I.t('join.offlineNote')
         }));
       }
     }
+  }
+
+  function otherLanguageUrl() {
+    var target = I.lang() === 'fa' ? '../index.html' : 'fa/index.html';
+    var query = sync.hasKey() ? '?key=' + encodeURIComponent(sync.key()) : '';
+    return target + query + '#/' + (state.slide + 1);
   }
 
   function closeOverlay() {
@@ -561,9 +558,12 @@
         fitBody(s);
         // Page breaks follow layout, and a transform only scales the paint, so a
         // shrunk slide would spill onto the next page. Zoom shrinks the layout itself.
+        // Zoom scales every length inside the box, so the box keeps its normal width
+        // (the widened 100/k % is only for the transform) and the text wraps the same.
         var m = /scale\(([\d.]+)\)/.exec(s.fit.style.transform || '');
         if (m) {
           s.fit.style.transform = '';
+          s.fit.style.width = '';
           s.fit.style.zoom = m[1];
         }
       });
@@ -609,7 +609,7 @@
       if (sync.mode() === 'local') onSnapshot(sync.snapshot(), 'local');
       refreshJoin();
       if (wanted !== null && wanted !== state.slide && canControl()) gotoSlide(wanted);
-      if (sync.mode() === 'live' && !sync.hasKey()) toast('View only. Use the presenter link to move the slides.');
+      if (sync.mode() === 'live' && !sync.hasKey()) toast(I.t('toast.viewOnlyStart'));
     });
     setInterval(tick, 250);
     setTimeout(function () { hint.classList.add('is-faded'); }, 7000);

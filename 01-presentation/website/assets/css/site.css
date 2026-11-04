@@ -112,6 +112,34 @@
 .tone-sky { --tone: var(--sky); }
 .tone-rose { --tone: var(--rose); }
 
+/* Persian: Vazirmatn (self-hosted, OFL) and right-to-left details */
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('../fonts/vazirmatn-variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root:lang(fa) { --font: 'Vazirmatn', 'Inter', Tahoma, system-ui, sans-serif; }
+
+/* Letter-spacing breaks the joins between Persian letters. */
+:lang(fa) *, :lang(fa) *::before, :lang(fa) *::after { letter-spacing: 0 !important; }
+
+:lang(fa) .para, :lang(fa) .list .item, :lang(fa) .card-text, :lang(fa) .col-text,
+:lang(fa) .col-item, :lang(fa) .prompt, :lang(fa) .line, :lang(fa) .kv,
+:lang(fa) .pair-text, :lang(fa) .section-lead .lead-small, :lang(fa) .cover-sub { line-height: 1.6; }
+
+:lang(fa) .slide-title, :lang(fa) .cover-title { line-height: 1.25; }
+
+/* Persian has no italics (a slanted Vazirmatn is synthetic and leans the wrong
+   way), so emphasis is a heavier weight instead. */
+:lang(fa) em, :lang(fa) i { font-style: normal; font-weight: 600; }
+:lang(fa) strong em, :lang(fa) b em { font-weight: inherit; }
+
+[dir="rtl"] .ix-timer-fill, [dir="rtl"] .ph-timer-fill { transform-origin: right center; }
+
+[dir="rtl"] .vf-arrow { display: inline-block; transform: scaleX(-1); }
+
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body { margin: 0; height: 100%; }
@@ -157,6 +185,9 @@ a { color: var(--accent); }
   width: 1920px;
   height: 1080px;
   transform-origin: center center;
+  /* Slides slide in from 36px off the canvas. Clipping here keeps that out of the
+     page's scroll area, which in right-to-left mode would shift the whole view. */
+  overflow: hidden;
 }
 
 .slide {
@@ -337,12 +368,15 @@ code {
   border-radius: 10px;
   background: var(--accent-soft);
   color: var(--accent-ink);
+  /* File paths and markup read left to right, also inside Persian text. */
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 .callout {
   margin-top: 26px !important;
-  padding-left: 30px;
-  border-left: 8px solid var(--theme);
+  padding-inline-start: 30px;
+  border-inline-start: 8px solid var(--theme);
   font-size: 42px !important;
   line-height: 1.35 !important;
   font-weight: 600;
@@ -361,7 +395,7 @@ code {
 
 .list .item {
   position: relative;
-  padding-left: 56px;
+  padding-inline-start: 56px;
   font-size: 36px;
   line-height: 1.38;
   color: var(--ink-2);
@@ -370,7 +404,7 @@ code {
 .list-bullets .item::before {
   content: '';
   position: absolute;
-  left: 8px;
+  inset-inline-start: 8px;
   top: .42em;
   width: 16px;
   height: 16px;
@@ -387,7 +421,7 @@ code {
 .list-steps .item::before {
   content: counter(step);
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 2px;
   width: 42px;
   height: 42px;
@@ -399,6 +433,9 @@ code {
   color: #fff;
   background: var(--theme);
 }
+
+/* Persian digits for step numbers, matching the rest of the Persian deck. */
+:lang(fa) .list-steps .item::before { content: counter(step, persian); }
 
 .list .item-children {
   margin-top: 12px;
@@ -412,24 +449,24 @@ code {
 
 .list .item-children .item {
   font-size: 30px;
-  padding-left: 40px;
+  padding-inline-start: 40px;
 }
 
 .list .item-children .list-bullets .item::before {
   width: 11px;
   height: 11px;
-  left: 6px;
+  inset-inline-start: 6px;
   top: .5em;
   background: var(--ink-3);
 }
 
 .list .item-children .para { font-size: 30px; margin-bottom: 10px; }
 
-.list .item.check { padding-left: 66px; }
+.list .item.check { padding-inline-start: 66px; }
 
 .list .item .box {
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 2px;
   width: 42px;
   height: 42px;
@@ -486,7 +523,7 @@ code {
 }
 
 .table th {
-  text-align: left;
+  text-align: start;
   padding: 18px 22px;
   font-size: 24px;
   letter-spacing: .03em;
@@ -509,7 +546,7 @@ code {
   padding: 30px 38px;
   border-radius: var(--radius-sm);
   background: var(--card);
-  border-left: 8px solid var(--theme);
+  border-inline-start: 8px solid var(--theme);
   box-shadow: var(--shadow);
   font-size: 32px;
   line-height: 1.45;
@@ -806,7 +843,7 @@ code {
 
 .pair-text { margin: 0; font-size: 30px; line-height: 1.45; color: var(--ink-2); }
 
-.pair-quote .prompt { box-shadow: none; border-left-color: var(--accent); background: var(--accent-soft); }
+.pair-quote .prompt { box-shadow: none; border-inline-start-color: var(--accent); background: var(--accent-soft); }
 
 .pair-quote .prompt .line { font-size: 30px; }
 
@@ -868,9 +905,9 @@ code {
   gap: 26px;
 }
 
-.section.has-mark { padding-left: 0; }
+.section.has-mark { padding-inline-start: 0; }
 
-.section-mark { position: absolute; right: 0; top: -20px; width: 150px; height: 150px; opacity: .9; }
+.section-mark { position: absolute; inset-inline-end: 0; top: -20px; width: 150px; height: 150px; opacity: .9; }
 
 .section-lead .lead-main {
   margin: 0 0 14px;
@@ -910,7 +947,7 @@ code {
 
 .cols.is-stacked .col {
   border-top: 0;
-  border-left: 10px solid var(--tone, var(--accent));
+  border-inline-start: 10px solid var(--tone, var(--accent));
   padding: 18px 24px 20px;
   gap: 8px;
 }
@@ -1086,7 +1123,7 @@ code {
 .lp-mark {
   position: absolute;
   top: 22px;
-  right: 18px;
+  inset-inline-end: 18px;
   padding: 6px 14px;
   border-radius: 999px;
   font-size: 20px;
@@ -1158,7 +1195,7 @@ code {
   animation: grow .9s cubic-bezier(.2, .7, .2, 1) both;
 }
 
-.nw-pct { text-align: right; font-weight: 700; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.nw-pct { text-align: end; font-weight: 700; color: var(--ink-2); font-variant-numeric: tabular-nums; }
 
 .nw-note { margin: 0; font-size: 22px; line-height: 1.4; color: var(--ink-3); }
 
@@ -1211,7 +1248,8 @@ code {
   align-self: flex-end;
   max-width: 80%;
   padding: 24px 30px;
-  border-radius: 28px 28px 8px 28px;
+  border-radius: 28px;
+  border-end-end-radius: 8px;
   background: var(--accent);
   color: #fff;
   font-size: 30px;
@@ -1392,9 +1430,9 @@ code {
 }
 
 .ix-opt.is-h .ix-opt-label { grid-column: 1; grid-row: 1; font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ix-opt.is-h .ix-val { grid-column: 2; grid-row: 1; text-align: right; font-size: 24px; }
+.ix-opt.is-h .ix-val { grid-column: 2; grid-row: 1; text-align: end; font-size: 24px; }
 .ix-opt.is-h .ix-track { grid-column: 1 / -1; grid-row: 2; height: 14px; }
-.ix-opt.is-h .ix-mark { position: absolute; right: -4px; top: -6px; font-size: 22px; }
+.ix-opt.is-h .ix-mark { position: absolute; inset-inline-end: -4px; top: -6px; font-size: 22px; }
 
 .ix-item-text { font-size: 32px; font-weight: 600; line-height: 1.3; color: var(--ink); }
 
@@ -1423,7 +1461,7 @@ code {
   transition: width .7s cubic-bezier(.2, .7, .2, 1), background .4s ease;
 }
 
-.ix-val { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink); }
+.ix-val { text-align: end; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink); }
 
 .ix-mark { display: none; font-size: 30px; font-weight: 800; color: var(--green); }
 
@@ -1471,7 +1509,7 @@ code {
   border-radius: 22px;
   background: var(--paper);
   border: 1px solid var(--line);
-  border-left: 8px solid var(--accent);
+  border-inline-start: 8px solid var(--accent);
   font-size: 28px;
   line-height: 1.32;
   color: var(--ink);
@@ -1579,7 +1617,7 @@ code {
 
 .pg-fill {
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 0;
   bottom: 0;
   width: 0;
@@ -1599,7 +1637,7 @@ code {
 
 .conn {
   position: fixed;
-  left: 24px;
+  inset-inline-start: 24px;
   bottom: 24px;
   z-index: 30;
   padding: 8px 16px;
@@ -1656,8 +1694,8 @@ code {
   transition: opacity .3s ease;
 }
 
-.nav-prev { left: 18px; }
-.nav-next { right: 18px; }
+.nav-prev { inset-inline-start: 18px; }
+.nav-next { inset-inline-end: 18px; }
 
 .show-nav .nav-btn { opacity: .85; }
 
@@ -1740,7 +1778,7 @@ code {
 .overlay-close {
   position: absolute;
   top: 18px;
-  right: 22px;
+  inset-inline-end: 22px;
   width: 52px;
   height: 52px;
   border-radius: 50%;
@@ -1767,10 +1805,10 @@ code {
   gap: 6px;
   min-height: 132px;
   padding: 16px 18px 18px 22px;
-  text-align: left;
+  text-align: start;
   border-radius: 18px;
   border: 1px solid var(--line);
-  border-left: 8px solid var(--theme);
+  border-inline-start: 8px solid var(--theme);
   background: var(--paper);
   color: var(--ink);
   cursor: pointer;
@@ -1815,7 +1853,8 @@ code {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 6px 18px 6px 6px;
+  padding-block: 6px;
+  padding-inline: 6px 18px;
   border-radius: 20px;
   background: var(--card);
   border: 1px solid var(--line);
@@ -1828,6 +1867,10 @@ code {
 .join-label { font-size: 17px; color: var(--ink-3); }
 .join-url { font-size: 22px; font-weight: 800; color: var(--accent); }
 .join-badge.is-offline .join-qr { display: none; }
+
+/* Addresses always read left to right, also inside Persian text. */
+.join-url, .cover-join-url, .join-big-url { direction: ltr; unicode-bidi: isolate; }
+[dir="rtl"] .join-url, [dir="rtl"] .cover-join-url { text-align: right; }
 
 /* Animations */
 @keyframes grow { from { width: 0; } }
@@ -1851,7 +1894,7 @@ code {
 @media print {
   @page { size: 1920px 1080px; margin: 0; }
   html, body { height: auto; overflow: visible; background: #fff; }
-  .stage { position: static; width: auto; height: auto; transform: none !important; }
+  .stage { position: static; width: auto; height: auto; transform: none !important; overflow: visible; }
   .slide {
     position: relative;
     inset: auto;
@@ -1917,7 +1960,7 @@ code {
 
 .pc-plan { font-size: 14px; color: var(--ink-3); }
 
-.pc-links { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; font-weight: 700; margin-left: auto; }
+.pc-links { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; font-weight: 700; margin-inline-start: auto; }
 
 .pc-toast {
   position: fixed;
@@ -1984,18 +2027,18 @@ code {
 
 .pc-step { margin: 10px 0 0; font-size: 14px; font-weight: 800; color: var(--accent); }
 
-.pc-notes { max-height: 48vh; overflow: auto; padding-right: 6px; }
+.pc-notes { max-height: 48vh; overflow: auto; padding-inline-end: 6px; }
 
 .pc-notes .para { font-size: 17px; line-height: 1.6; color: var(--ink-2); margin: 0 0 12px; max-width: none; }
 .pc-notes .list { gap: 8px; margin: 0 0 12px; }
-.pc-notes .item { font-size: 17px; padding-left: 26px; color: var(--ink-2); }
-.pc-notes .item::before { width: 8px; height: 8px; left: 4px; top: .6em; }
+.pc-notes .item { font-size: 17px; padding-inline-start: 26px; color: var(--ink-2); }
+.pc-notes .item::before { width: 8px; height: 8px; inset-inline-start: 4px; top: .6em; }
 .pc-notes .table { font-size: 15px; }
 .pc-notes .table th, .pc-notes .table td { padding: 8px 10px; }
 .pc-notes .prompt { font-size: 16px; padding: 14px 16px; margin-bottom: 12px; }
 .pc-notes .prompt .line { font-size: 16px; }
 
-.pc-fill { margin: 0; padding-left: 18px; font-size: 14px; color: var(--ink-2); }
+.pc-fill { margin: 0; padding-inline-start: 18px; font-size: 14px; color: var(--ink-2); }
 .pc-fill li { margin-bottom: 4px; }
 
 .pc-nav-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
@@ -2087,12 +2130,13 @@ code {
   gap: 10px;
   align-items: center;
   position: relative;
-  padding: 7px 10px 7px 14px;
+  padding-block: 7px;
+  padding-inline: 14px 10px;
   border: 0;
   border-radius: 8px;
   background: transparent;
   color: var(--ink);
-  text-align: left;
+  text-align: start;
   font-size: 13px;
   cursor: pointer;
 }
@@ -2112,7 +2156,7 @@ code {
 .pc-slides li:has(.is-current) .pc-slide-link, .pc-slides li .is-current { background: var(--accent-soft); }
 
 .pc-slide-num { font-weight: 800; color: var(--theme); font-variant-numeric: tabular-nums; }
-.pc-slide-time { text-align: right; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.pc-slide-time { text-align: end; color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .pc-slide-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .pc-foot { margin: 0; padding: 0 16px 16px; font-size: 13px; color: var(--ink-3); }
@@ -2154,7 +2198,7 @@ code {
 /* A narrow screen stacks the console into one column */
 @media (max-width: 1100px) {
   .pc-grid { grid-template-columns: 1fr; }
-  .pc-links { margin-left: 0; }
+  .pc-links { margin-inline-start: 0; }
 }
 
 /* ==========================================================================
@@ -2186,6 +2230,17 @@ code {
 }
 
 .ph-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--line-2); }
+
+.ph-lang {
+  margin-inline-start: auto;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+}
 .ph-dot.is-live { background: var(--green); box-shadow: 0 0 0 4px color-mix(in srgb, var(--green) 20%, transparent); }
 .ph-dot.is-warn { background: var(--amber); }
 .ph-dot.is-local { background: var(--ink-3); }
@@ -2243,7 +2298,7 @@ code {
   border: 2px solid var(--line-2);
   background: var(--paper);
   color: var(--ink);
-  text-align: left;
+  text-align: start;
   font-size: 17px;
   font-weight: 600;
   line-height: 1.3;
@@ -2322,15 +2377,15 @@ code {
 .ph-text summary { cursor: pointer; font-weight: 700; color: var(--ink-2); }
 .ph-text .para { font-size: 16px; line-height: 1.5; color: var(--ink-2); margin: 10px 0; }
 .ph-text .list { gap: 8px; margin: 10px 0; }
-.ph-text .item { font-size: 16px; padding-left: 26px; color: var(--ink-2); line-height: 1.45; }
-.ph-text .item::before { width: 8px; height: 8px; left: 6px; top: .6em; }
+.ph-text .item { font-size: 16px; padding-inline-start: 26px; color: var(--ink-2); line-height: 1.45; }
+.ph-text .item::before { width: 8px; height: 8px; inset-inline-start: 6px; top: .6em; }
 .ph-text .table { font-size: 14px; }
 .ph-text .table th, .ph-text .table td { padding: 8px; }
 .ph-text .prompt { font-size: 14px; padding: 12px 14px; }
 .ph-text .prompt .line { font-size: 14px; }
 .ph-text .kv { grid-template-columns: 1fr; font-size: 15px; gap: 2px; }
 .ph-text .list-steps .item::before { width: 26px; height: 26px; font-size: 13px; }
-.ph-text .list-steps .item { padding-left: 38px; }
+.ph-text .list-steps .item { padding-inline-start: 38px; }
 .ph-text .card-grid { display: none; }
 .ph-text .table-wrap { overflow-x: auto; }
 .ph-text .chip { font-size: 14px; padding: 6px 12px; }

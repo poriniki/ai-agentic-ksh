@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The AI-Powered Professional</title>
-  <meta name="description" content="Interactive workshop deck: practical AI for Marketing, Business and Finance teams, with live audience polls.">
+  <title data-i18n="page.deckTitle">The AI-Powered Professional</title>
+  <meta name="description" content="Interactive workshop deck: practical AI for Marketing, Business and Finance teams, with live audience polls." data-i18n-attrs="content:page.deckDescription">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect x='8' y='92' width='16' height='22' rx='4' fill='%234338ca'/%3E%3Crect x='30' y='74' width='16' height='40' rx='4' fill='%234338ca'/%3E%3Crect x='52' y='56' width='16' height='58' rx='4' fill='%234338ca'/%3E%3Crect x='74' y='38' width='16' height='76' rx='4' fill='%230d9488'/%3E%3Crect x='96' y='20' width='16' height='94' rx='4' fill='%230d9488'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,19 +16,19 @@
 
   <div id="progress" class="progress" aria-hidden="true"></div>
   <div id="conn" class="conn" role="status"></div>
-  <p id="hint" class="nav-hint">← → move · O all slides · G go to · Q join QR · P presenter · ? keys</p>
-  <button id="nav-prev" class="nav-btn nav-prev" type="button" aria-label="Previous slide">‹</button>
-  <button id="nav-next" class="nav-btn nav-next" type="button" aria-label="Next slide">›</button>
+  <p id="hint" class="nav-hint" data-i18n="hint.keys">← → move · O all slides · G go to · Q join QR · P presenter · ? keys</p>
+  <button id="nav-prev" class="nav-btn nav-prev" type="button" aria-label="Previous slide" data-i18n="nav.prevGlyph" data-i18n-attrs="aria-label:nav.prev">‹</button>
+  <button id="nav-next" class="nav-btn nav-next" type="button" aria-label="Next slide" data-i18n="nav.nextGlyph" data-i18n-attrs="aria-label:nav.next">›</button>
   <div id="reactions" class="reactions" aria-hidden="true"></div>
   <div id="toast" class="toast" role="status"></div>
 
   <div id="blackout" class="blackout" hidden>
-    <p>Back soon</p>
+    <p data-i18n="blackout.text">Back soon</p>
   </div>
 
   <div id="overlay" class="overlay" hidden>
-    <div class="overlay-panel" role="dialog" aria-modal="true" aria-label="Deck panel">
-      <button class="overlay-close" type="button" data-action="close" aria-label="Close">×</button>
+    <div class="overlay-panel" role="dialog" aria-modal="true" aria-label="Deck panel" data-i18n-attrs="aria-label:panel.label">
+      <button class="overlay-close" type="button" data-action="close" aria-label="Close" data-i18n-attrs="aria-label:panel.close">×</button>
       <div id="overlay-body"></div>
     </div>
   </div>
@@ -36,6 +36,7 @@
   <script src="data/deck.js"></script>
   <script src="assets/vendor/qrcode.js"></script>
   <script src="assets/js/core.js"></script>
+  <script src="assets/js/i18n.js"></script>
   <script src="assets/js/render.js"></script>
   <script src="assets/js/sync.js"></script>
   <script src="assets/js/interactions.js"></script>

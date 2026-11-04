@@ -27,11 +27,16 @@
     slide.interactions.forEach(function (it) { defs[it.id] = it; });
   });
 
+  // Pages in a sub-folder (the Persian pages in fa/) reach the API at the site root.
+  var BASE = document.documentElement.getAttribute('data-base') || '';
+  // Each language has its own audience page; the QR codes point to it.
+  var JOIN_PATH = document.documentElement.getAttribute('data-join') || 'join';
+
   var listeners = [];
   var mode = 'connecting';   // 'live' | 'local' | 'connecting'
   var status = 'connecting'; // 'live' | 'reconnecting' | 'local' | 'connecting'
   var snap = null;           // { state, results, reactions, connections, serverNow }
-  var info = { live: false, joinUrls: [] };
+  var info = { live: false, origins: [] };
   var offset = 0;            // server clock minus this clock, in ms
   var source = null;
   var key = readKey();
@@ -115,8 +120,10 @@
     }
   }
 
+  // Errors carry the server's code (for messages in the reader's language);
+  // a network failure has status 0.
   function post(path, body) {
-    return window.fetch(path, {
+    return window.fetch(BASE + path, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
@@ -125,17 +132,22 @@
         if (!res.ok) {
           var err = new Error(data.error || 'Request failed');
           err.status = res.status;
+          err.code = data.code || null;
           throw err;
         }
         return data;
       });
+    }, function () {
+      var err = new Error('Network error');
+      err.status = 0;
+      throw err;
     });
   }
 
   // ---- Start-up -------------------------------------------------------------
   function startLocal() {
     mode = 'local';
-    info = { live: false, joinUrls: [] };
+    info = { live: false, origins: [] };
     window.addEventListener('storage', function (e) {
       if (Object.keys(KEYS).some(function (name) { return KEYS[name] === e.key; })) localRefresh();
     });
@@ -146,7 +158,7 @@
 
   function startLive() {
     mode = 'live';
-    source = new window.EventSource('api/stream');
+    source = new window.EventSource(BASE + 'api/stream');
     source.addEventListener('snapshot', function (e) {
       setStatus('live');
       applySnapshot(JSON.parse(e.data));
@@ -160,7 +172,7 @@
       startLocal();
       return Promise.resolve(mode);
     }
-    return window.fetch('api/info', { cache: 'no-store' })
+    return window.fetch(BASE + 'api/info', { cache: 'no-store' })
       .then(function (res) {
         if (!res.ok) throw new Error('no live server');
         return res.json();
@@ -277,7 +289,10 @@
     reset: reset,
     mine: mine,
     setMine: setMine,
-    exportUrl: function () { return 'api/export?key=' + encodeURIComponent(key); },
-    joinUrl: function () { return (info.joinUrls && info.joinUrls[0]) || null; }
+    exportUrl: function () { return BASE + 'api/export?key=' + encodeURIComponent(key); },
+    joinUrl: function () {
+      var origin = info.origins && info.origins[0];
+      return origin ? origin + '/' + JOIN_PATH : null;
+    }
   };
 })(window.AIPro = window.AIPro || {});

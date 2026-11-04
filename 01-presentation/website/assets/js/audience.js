@@ -9,13 +9,14 @@
   var el = R.el;
   var core = ns.core;
   var sync = ns.sync;
+  var I = ns.i18n;
   var deck = window.AIPRO_DECK;
   var N = deck.slides.length;
   var REACTIONS = [
-    ['👍', 'Got it'],
-    ['❓', 'Question'],
-    ['💡', 'Insight'],
-    ['🐢', 'Slow down']
+    ['👍', 'react.got'],
+    ['❓', 'react.question'],
+    ['💡', 'react.insight'],
+    ['🐢', 'react.slow']
   ];
 
   function $(sel) { return document.querySelector(sel); }
@@ -26,21 +27,10 @@
   var lastResults = {};
 
   function renderStatus(status) {
-    var dot = $('#ph-dot');
-    var text = $('#ph-status');
-    if (status === 'live') {
-      dot.className = 'ph-dot is-live';
-      text.textContent = 'Live with the presenter';
-    } else if (status === 'reconnecting') {
-      dot.className = 'ph-dot is-warn';
-      text.textContent = 'Reconnecting…';
-    } else if (status === 'local') {
-      dot.className = 'ph-dot is-local';
-      text.textContent = 'Not connected to a live session';
-    } else {
-      dot.className = 'ph-dot';
-      text.textContent = 'Connecting…';
-    }
+    var keys = { live: 'ph.live', reconnecting: 'ph.reconnecting', local: 'ph.local' };
+    var dots = { live: 'is-live', reconnecting: 'is-warn', local: 'is-local' };
+    $('#ph-dot').className = 'ph-dot ' + (dots[status] || '');
+    $('#ph-status').textContent = I.t(keys[status] || 'ph.connecting');
   }
 
   function buildFor(index) {
@@ -53,23 +43,20 @@
     var box = $('#ph-slide');
     box.textContent = '';
     box.appendChild(el('div', { cls: 'ph-chip theme-' + slide.theme, text: slide.moduleName }));
-    box.appendChild(el('h2', { cls: 'ph-slide-title', text: 'Slide ' + slide.n + ' of ' + N + ' · ' + slide.title }));
+    box.appendChild(el('h2', { cls: 'ph-slide-title', text: I.t('ph.slideLine', { n: slide.n, total: N, title: slide.title }) }));
 
     var qs = $('#ph-questions');
     qs.textContent = '';
     if (handles.length) {
       handles.forEach(function (h) { qs.appendChild(h.handle.el); });
     } else {
-      qs.appendChild(el('div', { cls: 'ph-card ph-quiet' }, [
-        el('p', { text: 'No question on this slide. Follow along on the screen.' })
-      ]));
+      qs.appendChild(el('div', { cls: 'ph-card ph-quiet' }, [el('p', { text: I.t('ph.quiet') })]));
     }
 
     var text = $('#ph-text');
     text.textContent = '';
     R.blocks(slide.blocks, { frag: false }).forEach(function (n) { text.appendChild(n); });
-    if (!text.childNodes.length) text.appendChild(el('p', { cls: 'ph-muted', text: 'This slide is a picture or a break.' }));
-    $('#ph-text-wrap').hidden = !text.childNodes.length;
+    if (!text.childNodes.length) text.appendChild(el('p', { cls: 'ph-muted', text: I.t('ph.noText') }));
     $('#ph-text-wrap').open = !handles.length;
   }
 
@@ -77,9 +64,8 @@
     if (!lastState) return;
     var slide = deck.slides[lastState.slide];
     if (lastState.slide !== currentIndex) buildFor(lastState.slide);
-    var views = core.interactionViews(slide, lastState.step);
     var byId = {};
-    views.forEach(function (v) { byId[v.id] = v; });
+    core.interactionViews(slide, lastState.step).forEach(function (v) { byId[v.id] = v; });
     handles.forEach(function (h) {
       h.handle.update({
         view: byId[h.def.id] || null,
@@ -98,29 +84,26 @@
     var totals = (data.reactions && data.reactions.totals) || {};
     REACTIONS.forEach(function (r) {
       var node = document.querySelector('[data-count="' + r[0] + '"]');
-      if (node) node.textContent = totals[r[0]] ? String(totals[r[0]]) : '';
+      if (node) node.textContent = totals[r[0]] ? I.digits(totals[r[0]]) : '';
     });
-    var offline = sync.mode() === 'local';
-    $('#ph-offline').hidden = !offline;
+    $('#ph-offline').hidden = sync.mode() !== 'local';
     if (lastState) refresh();
   }
 
   function bindReactions() {
     var bar = $('#ph-reactions');
     REACTIONS.forEach(function (r) {
-      var btn = el('button', {
-        cls: 'ph-react',
-        attrs: { type: 'button', 'aria-label': r[1] }
-      }, [
+      var label = I.t(r[1]);
+      var btn = el('button', { cls: 'ph-react', attrs: { type: 'button', 'aria-label': label } }, [
         el('span', { cls: 'ph-react-emoji', text: r[0] }),
-        el('span', { cls: 'ph-react-label', text: r[1] }),
+        el('span', { cls: 'ph-react-label', text: label }),
         el('span', { cls: 'ph-react-count', attrs: { 'data-count': r[0] } })
       ]);
       btn.addEventListener('click', function () {
         btn.classList.add('is-pressed');
         setTimeout(function () { btn.classList.remove('is-pressed'); }, 260);
         sync.react(r[0]).catch(function (err) {
-          $('#ph-hint').textContent = err.message;
+          $('#ph-hint').textContent = ns.interactions.errorText(err);
         });
       });
       bar.appendChild(btn);

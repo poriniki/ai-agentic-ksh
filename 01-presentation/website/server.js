@@ -41,7 +41,13 @@ const PAGES = {
   '/presenter': 'presenter.html',
   '/presenter.html': 'presenter.html',
   '/join': 'join.html',
-  '/join.html': 'join.html'
+  '/join.html': 'join.html',
+  '/fa/': 'fa/index.html',
+  '/fa/index.html': 'fa/index.html',
+  '/fa/presenter': 'fa/presenter.html',
+  '/fa/presenter.html': 'fa/presenter.html',
+  '/fa/join': 'fa/join.html',
+  '/fa/join.html': 'fa/join.html'
 };
 const PUBLIC_PREFIXES = ['/assets/', '/data/'];
 const MIME = {
@@ -51,7 +57,9 @@ const MIME = {
   '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.woff2': 'font/woff2',
+  '.txt': 'text/plain; charset=utf-8'
 };
 
 // ---------------------------------------------------------------------------
@@ -75,6 +83,18 @@ function currentDraftHash() {
 }
 if (currentDraftHash() && currentDraftHash() !== deck.meta.sourceHash) {
   console.warn('Warning: presentation-draft.md changed since the last build. Run "npm run build".');
+}
+
+// The Persian deck shares this session (same slides, steps and questions), so a
+// room can follow in either language. The build enforces that; check it again here.
+const FA_DECK_FILE = path.join(WEB, 'data', 'deck.fa.json');
+const hasPersian = fs.existsSync(FA_DECK_FILE) && fs.existsSync(path.join(WEB, 'fa', 'index.html'));
+if (hasPersian) {
+  const fa = JSON.parse(fs.readFileSync(FA_DECK_FILE, 'utf8'));
+  const shape = (d) => d.slides.map((sl) => `${sl.steps}:${sl.interactions.map((it) => it.id).join(',')}`).join('|');
+  if (shape(fa) !== shape(deck)) {
+    console.warn('Warning: the Persian deck no longer matches the English one. Run "npm run build".');
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -257,14 +277,14 @@ function validClientId(id) {
 }
 
 function command(body, res) {
-  if (!keyOk(body.key)) return sendJson(res, 403, { error: 'Presenter key missing or wrong.' });
+  if (!keyOk(body.key)) return sendJson(res, 403, { error: 'Presenter key missing or wrong.', code: 'key' });
   const action = body.action || {};
   if (!['goto', 'next', 'prev', 'timer'].includes(action.type)) {
-    return sendJson(res, 400, { error: 'Unknown action.' });
+    return sendJson(res, 400, { error: 'Unknown action.', code: 'bad_request' });
   }
   if (action.type === 'timer') {
-    if (!deck.timers[action.id]) return sendJson(res, 400, { error: 'Unknown timer.' });
-    if (!['start', 'pause', 'reset'].includes(action.op)) return sendJson(res, 400, { error: 'Unknown timer operation.' });
+    if (!deck.timers[action.id]) return sendJson(res, 400, { error: 'Unknown timer.', code: 'bad_request' });
+    if (!['start', 'pause', 'reset'].includes(action.op)) return sendJson(res, 400, { error: 'Unknown timer operation.', code: 'bad_request' });
   }
   state = core.reduce(state, action, { slides: deck.slides, timers: deck.timers, now: Date.now() });
   changed();
@@ -272,27 +292,27 @@ function command(body, res) {
 }
 
 function vote(body, res) {
-  if (!validClientId(body.clientId)) return sendJson(res, 400, { error: 'Bad client id.' });
-  if (!allow(body.clientId, 120)) return sendJson(res, 429, { error: 'Too many answers. Slow down a little.' });
+  if (!validClientId(body.clientId)) return sendJson(res, 400, { error: 'Bad client id.', code: 'bad_request' });
+  if (!allow(body.clientId, 120)) return sendJson(res, 429, { error: 'Too many answers. Slow down a little.', code: 'rate' });
 
   const def = defs[body.id];
-  if (!def) return sendJson(res, 400, { error: 'Unknown question.' });
+  if (!def) return sendJson(res, 400, { error: 'Unknown question.', code: 'bad_request' });
   const info = deck.interactions[body.id];
   const slide = deck.slides[state.slide];
-  if (!slide || slide.n !== info.slide) return sendJson(res, 409, { error: 'This question is not on screen.' });
+  if (!slide || slide.n !== info.slide) return sendJson(res, 409, { error: 'This question is not on screen.', code: 'not_on_screen' });
 
   if (def.kind === 'choice') {
     const view = core.interactionViews(slide, state.step).find((v) => v.id === def.id);
     const item = body.item;
     const choice = body.choice;
     if (!Number.isInteger(item) || item < 0 || item >= def.items.length) {
-      return sendJson(res, 400, { error: 'Bad item.' });
+      return sendJson(res, 400, { error: 'Bad item.', code: 'bad_request' });
     }
     if (!Number.isInteger(choice) || choice < 0 || choice >= def.options.length) {
-      return sendJson(res, 400, { error: 'Bad option.' });
+      return sendJson(res, 400, { error: 'Bad option.', code: 'bad_request' });
     }
-    if (item >= view.visibleItems) return sendJson(res, 409, { error: 'This item is not open yet.' });
-    if (view.answersRevealed) return sendJson(res, 409, { error: 'Voting is closed for this question.' });
+    if (item >= view.visibleItems) return sendJson(res, 409, { error: 'This item is not open yet.', code: 'not_open' });
+    if (view.answersRevealed) return sendJson(res, 409, { error: 'Voting is closed for this question.', code: 'closed' });
     votes[def.id] = votes[def.id] || {};
     votes[def.id][body.clientId] = votes[def.id][body.clientId] || {};
     votes[def.id][body.clientId][item] = choice;
@@ -302,23 +322,23 @@ function vote(body, res) {
 
   if (def.kind === 'open') {
     const text = core.cleanText(body.text, def.maxLength);
-    if (text.length < 2) return sendJson(res, 400, { error: 'Please write a few words.' });
+    if (text.length < 2) return sendJson(res, 400, { error: 'Please write a few words.', code: 'too_short' });
     const list = responses[def.id] || [];
     const mine = list.filter((r) => r.client === body.clientId).length;
-    if (mine >= MAX_OWN_RESPONSES) return sendJson(res, 429, { error: `You can send up to ${MAX_OWN_RESPONSES} answers here.` });
+    if (mine >= MAX_OWN_RESPONSES) return sendJson(res, 429, { error: `You can send up to ${MAX_OWN_RESPONSES} answers here.`, code: 'limit' });
     responses[def.id] = list;
     list.push({ id: ++seq, text, at: Date.now(), hidden: false, client: body.clientId });
     changed();
     return sendJson(res, 200, { ok: true });
   }
 
-  return sendJson(res, 400, { error: 'This question does not take answers.' });
+  return sendJson(res, 400, { error: 'This question does not take answers.', code: 'bad_request' });
 }
 
 function react(body, res) {
-  if (!validClientId(body.clientId)) return sendJson(res, 400, { error: 'Bad client id.' });
-  if (!REACTIONS[body.emoji]) return sendJson(res, 400, { error: 'Unknown reaction.' });
-  if (!allow(body.clientId, 60)) return sendJson(res, 429, { error: 'Slow down a little.' });
+  if (!validClientId(body.clientId)) return sendJson(res, 400, { error: 'Bad client id.', code: 'bad_request' });
+  if (!REACTIONS[body.emoji]) return sendJson(res, 400, { error: 'Unknown reaction.', code: 'bad_request' });
+  if (!allow(body.clientId, 60)) return sendJson(res, 429, { error: 'Slow down a little.', code: 'rate' });
   reactions.totals[body.emoji] = (reactions.totals[body.emoji] || 0) + 1;
   reactions.recent.push({ id: ++seq, emoji: body.emoji, at: Date.now() });
   if (reactions.recent.length > 40) reactions.recent = reactions.recent.slice(-40);
@@ -327,19 +347,19 @@ function react(body, res) {
 }
 
 function moderate(body, res) {
-  if (!keyOk(body.key)) return sendJson(res, 403, { error: 'Presenter key missing or wrong.' });
+  if (!keyOk(body.key)) return sendJson(res, 403, { error: 'Presenter key missing or wrong.', code: 'key' });
   const list = responses[body.id] || [];
   const hit = list.find((r) => r.id === body.responseId);
-  if (!hit) return sendJson(res, 404, { error: 'Response not found.' });
+  if (!hit) return sendJson(res, 404, { error: 'Response not found.', code: 'not_found' });
   hit.hidden = body.hidden !== false;
   changed();
   return sendJson(res, 200, { ok: true });
 }
 
 function reset(body, res) {
-  if (!keyOk(body.key)) return sendJson(res, 403, { error: 'Presenter key missing or wrong.' });
+  if (!keyOk(body.key)) return sendJson(res, 403, { error: 'Presenter key missing or wrong.', code: 'key' });
   const scope = body.scope;
-  if (!['votes', 'responses', 'reactions', 'all'].includes(scope)) return sendJson(res, 400, { error: 'Unknown scope.' });
+  if (!['votes', 'responses', 'reactions', 'all'].includes(scope)) return sendJson(res, 400, { error: 'Unknown scope.', code: 'bad_request' });
   if (scope === 'votes' || scope === 'all') {
     if (body.id) delete votes[body.id];
     else votes = {};
@@ -423,13 +443,18 @@ function handleGet(url, req, res) {
       title: deck.title,
       slideCount: deck.slides.length,
       live: true,
-      joinUrls: lanUrls().map((ip) => `http://${ip}:${PORT}/join`).concat([`http://localhost:${PORT}/join`])
+      languages: hasPersian ? ['en', 'fa'] : ['en'],
+      origins: lanUrls().map((ip) => `http://${ip}:${PORT}`).concat([`http://localhost:${PORT}`])
     });
+  }
+  if (p === '/fa') {
+    res.writeHead(301, { Location: '/fa/' });
+    return res.end();
   }
   if (p === '/api/snapshot') return sendJson(res, 200, snapshot());
   if (p === '/api/stream') return stream(req, res);
   if (p === '/api/export') {
-    if (!keyOk(url.searchParams.get('key'))) return sendJson(res, 403, { error: 'Presenter key missing or wrong.' });
+    if (!keyOk(url.searchParams.get('key'))) return sendJson(res, 403, { error: 'Presenter key missing or wrong.', code: 'key' });
     return exportResults(res);
   }
   if (PAGES[p]) return sendFile(res, path.join(WEB, PAGES[p]));
@@ -447,7 +472,7 @@ async function handlePost(url, req, res) {
   try {
     body = await readBody(req);
   } catch (err) {
-    return sendJson(res, 400, { error: err.message });
+    return sendJson(res, 400, { error: err.message, code: 'bad_request' });
   }
   switch (url.pathname) {
     case '/api/command': return command(body, res);
@@ -491,6 +516,12 @@ server.listen(PORT, HOST, () => {
   console.log(`  Projector deck    ${base}/?key=${KEY}`);
   console.log(`  Presenter console ${base}/presenter.html?key=${KEY}`);
   console.log(`  Audience (phones) ${base}/join`);
+  if (hasPersian) {
+    console.log('');
+    console.log(`  Persian (فارسی)   ${base}/fa/?key=${KEY}`);
+    console.log(`                    ${base}/fa/presenter.html?key=${KEY}`);
+    console.log(`                    ${base}/fa/join`);
+  }
   console.log('');
   console.log(`  Presenter key: ${KEY}  (anyone with it can move the slides; keep it private)`);
   if (ips.length > 1) console.log(`  Other addresses: ${ips.slice(1).map((ip) => `http://${ip}:${PORT}`).join(', ')}`);
